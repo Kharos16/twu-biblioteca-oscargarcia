@@ -7,16 +7,17 @@ import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
 
 import org.junit.BeforeClass;
-import org.junit.Rule;
 import org.junit.Test;
 
 public class BlibliotecaAppTest {
     private static BookDataBase dataBase;
+    private static Poller poller;
 
 
     @BeforeClass
     public static void setUp() {
         dataBase = new BookDataBase();
+        poller = new Poller();
     }
 
     @Test
@@ -46,15 +47,16 @@ public class BlibliotecaAppTest {
 
     @Test
     public void menuShouldHaveNOptions() {
-        assertThat((int)Messages.MAIN_MENU().chars().filter(str -> str == '.').count(), is(equalTo(4)));
+        assertThat((int)Messages.mainMenu().chars().filter(str -> str == '.').count(), is(equalTo(4)));
     }
 
     @Test
-    public void ifInputIsNotANumberIShouldGetAMessage() {
-        assertThat(Messages.MENU_INPUT_ERROR, is(equalTo("You must enter a valid number!")));
+    public void ifInputIsNotAValidNumberIShouldGetAMessage() {
+        assertThat(Messages.MENU_INPUT_ERROR, is(equalTo("You must input a valid option!")));
     }
 
-    @Test
-    public void ifIsRunningIsFalse() {
+    @Test(expected = ExitException.class)
+    public void ifMenuOption4IsSelectedThenApplicationExits() {
+        poller.activePoll(4, dataBase);
     }
 }

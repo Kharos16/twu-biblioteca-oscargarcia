@@ -9,6 +9,7 @@ public class Book {
     private String author;
     private String editorial;
     private int yearOfPublication;
+    private boolean isAvailable;
 
     public Book() {}
 
@@ -19,6 +20,7 @@ public class Book {
         this.editorial = editorial;
         this.yearOfPublication = yearOfPublication;
         this.author = author;
+        this.isAvailable = true;
     }
 
     public Book(String title,  int yearOfPublication, String author) {
@@ -26,6 +28,7 @@ public class Book {
         this.title = title;
         this.yearOfPublication = yearOfPublication;
         this.author = author;
+        this.isAvailable = true;
     }
 
     public int getId() {
@@ -76,6 +79,14 @@ public class Book {
         this.editorial = editorial;
     }
 
+    public boolean isAvailable() {
+        return isAvailable;
+    }
+
+    public void setAvailable(boolean available) {
+        isAvailable = available;
+    }
+
     @Override
     public String toString() {
         return  "id: " + id + '\'' +
@@ -83,7 +94,15 @@ public class Book {
                 ", genre: '" + genre + '\'' +
                 ", author: '" + author + '\'' +
                 ", editorial: '" + editorial + '\'' +
-                ", yearOfPublication: " + yearOfPublication;
+                ", yearOfPublication: " + yearOfPublication + '\'' +
+                ", isAvailable: " + isAvailable;
+    }
+
+    public String shorterString() {
+        StringBuilder str = new StringBuilder();
+        str.append("Id: " + id);
+        str.append(" Title: " + title);
+        return str.toString();
     }
 
 }

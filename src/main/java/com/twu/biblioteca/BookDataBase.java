@@ -6,6 +6,7 @@ import com.twu.biblioteca.enums.Genre;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class BookDataBase {
     private List<Book> bookList;
@@ -38,10 +39,19 @@ public class BookDataBase {
 
     @Override
     public String toString() {
-        String list = "";
+        StringBuilder list = new StringBuilder();
         for (Book book: bookList) {
-            list += book + "\n";
+            list.append(book + "\n");
         }
-        return list;
+        return list.toString();
+    }
+
+    public String shorterString() {
+        StringBuilder list = new StringBuilder();
+        List<Book>filteredlist =
+                bookList.stream().filter(Book::isAvailable)
+                        .collect(Collectors.toList());
+        filteredlist.forEach(book -> list.append(book.shorterString() + "\n"));
+        return list.toString();
     }
 }

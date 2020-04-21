@@ -8,22 +8,8 @@ public class BibliotecaApp {
         System.out.println(Messages.HELLO_MESSAGE);
         Scanner inputFromUser = new Scanner(System.in);
         BookDataBase dataBase = new BookDataBase();
-        System.out.println(Messages.MAIN_MENU());
-        boolean isRunning = true;
-            do {
-                try {
-                    /*switch (inputFromUser) {
-
-                    }*/
-                    if (inputFromUser.nextInt() == 0) {
-                        isRunning = false;
-                    }
-                } catch (Exception e){
-                    System.out.println(e.toString());
-                    System.out.println(Messages.MENU_INPUT_ERROR);
-                    inputFromUser.next();
-                    continue;
-                }
-            } while (isRunning);
+        System.out.println(Messages.mainMenu());
+        Poller poller = new Poller();
+        poller.activePoll(inputFromUser,dataBase);
     }
 }
