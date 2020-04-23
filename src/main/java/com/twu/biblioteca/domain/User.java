@@ -1,12 +1,11 @@
 package com.twu.biblioteca.domain;
 
-import com.twu.biblioteca.domain.Book;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class User {
-    private List<Book> usedBooks;
+    private List<Book> bookList;
+    private List<Movie> movieList;
     private String username;
     private String password;
 
@@ -16,12 +15,15 @@ public class User {
     public User(String username, String password){
         this.username = username;
         this.password = password;
-        this.usedBooks = new ArrayList<>();
+        this.bookList = new ArrayList<>();
+        this.movieList = new ArrayList<>();
     }
 
-    public List<Book> getUsedBooks() {
-        return usedBooks;
+    public List<Book> getBookList() {
+        return bookList;
     }
+
+    public List<Movie> getMovieList() { return movieList; }
 
     public String getUsername() {
         return username;
@@ -32,13 +34,43 @@ public class User {
     }
 
     public void addBooks(Book usedBook) {
-        this.usedBooks.add(usedBook);
+        this.bookList.add(usedBook);
     }
     public void removeBooks(Book returningBook) {
-        for (Book usedBook : usedBooks) {
+        for (Book usedBook : bookList) {
             if (usedBook.getId() == returningBook.getId()){
-                usedBooks.remove(returningBook.getId());
+                bookList.remove(returningBook.getId());
             }
         }
+    }
+
+    public String getUsedBooks() {
+        StringBuilder str = new StringBuilder();
+        bookList.forEach(book -> {
+            str.append("Id: " + book.getId());
+            str.append(" Title: " + book.getTitle() + "\n");
+        });
+        return str.toString();
+    }
+
+    public void addMovie(Movie rentedMovie){
+        this.movieList.add(rentedMovie);
+    }
+
+    public void removeMovie(Movie returningMovie) {
+        for (Movie rentedMovie : movieList) {
+            if (rentedMovie.getId() == returningMovie.getId()){
+                movieList.remove(returningMovie.getId());
+            }
+        }
+    }
+
+    public String getUsedMovies() {
+        StringBuilder str = new StringBuilder();
+        movieList.forEach(movie -> {
+            str.append("Id: " + movie.getId());
+            str.append(" Title: " + movie.getTitle() + "\n");
+        });
+        return str.toString();
     }
 }

@@ -89,11 +89,11 @@ public class Book {
 
     @Override
     public String toString() {
-        return  "id: " + id + '\'' +
-                ", title: '" + title + '\'' +
-                ", genre: '" + genre + '\'' +
+        return  "Id: " + id +
+                ", Title: '" + title + '\'' +
+                ", Genre: '" + genre + '\'' +
                 ", Author: '" + author + '\'' +
-                ", editorial: '" + editorial + '\'' +
+                ", Editorial: '" + editorial + '\'' +
                 ", Year Of Publication: " + yearOfPublication + '\'' +
                 ", isAvailable: " + isAvailable;
     }
@@ -104,5 +104,4 @@ public class Book {
         str.append(" Title: " + title);
         return str.toString();
     }
-
 }

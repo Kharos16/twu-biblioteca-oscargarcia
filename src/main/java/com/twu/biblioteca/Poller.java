@@ -1,5 +1,6 @@
 package com.twu.biblioteca;
 
+import com.twu.biblioteca.databases.BookDataBase;
 import com.twu.biblioteca.domain.User;
 import com.twu.biblioteca.exceptions.ExitException;
 import com.twu.biblioteca.utils.Messages;
@@ -10,11 +11,13 @@ public class Poller {
     private boolean isRunning;
     private final Scanner inputFromUser;
     private final BookDataBase dataBase;
+    private final User currentLoggedUser;
 
-    public Poller(Scanner inputFromUser, BookDataBase dataBase){
+    public Poller(Scanner inputFromUser, BookDataBase dataBase, User currentLoggedUser){
         this.isRunning = true;
         this.inputFromUser = inputFromUser;
         this.dataBase = dataBase;
+        this.currentLoggedUser = currentLoggedUser;
     }
 
     public void activePoll() {
@@ -24,7 +27,7 @@ public class Poller {
                 interpretate(Integer.parseInt(inputFromUser.next()), dataBase);
             } catch (ExitException e) {
                 System.out.println(Messages.EXIT_APPLICATION);
-            } catch (NumberFormatException e) {
+            } catch (NumberFormatException | IndexOutOfBoundsException e) {
                 System.out.println(e.toString());
                 System.out.println(Messages.MENU_INPUT_ERROR);
             }
@@ -43,13 +46,16 @@ public class Poller {
                 System.out.println(dataBase.toString());
                 break;
             case 2:
-                System.out.println(Messages.CHECKOUT_MESSAGE);
-                System.out.println(Messages.CHECKOUTLIST_MESSAGE);
+                System.out.println(Messages.BOOK_CHECKOUT_MESSAGE);
+                System.out.println(Messages.BOOK_CHECKOUTLIST_MESSAGE);
                 System.out.println(dataBase.shorterString());
-                System.out.println(dataBase.bookCheckout(new User("Current_User", ""), Integer.valueOf(inputFromUser.next())));
+                System.out.println(dataBase.bookCheckout(currentLoggedUser, Integer.parseInt(inputFromUser.next())));
                 break;
             case 3:
-                System.out.println(Messages.RETURN_MESSAGE_CORRECT);
+                System.out.println(Messages.BOOK_RETURN_MESSAGE);
+                System.out.println(Messages.USER_BOOK_RETURN_MESSAGE);
+                System.out.println(currentLoggedUser.getUsedBooks());
+                System.out.println(dataBase.returnBook(currentLoggedUser, Integer.parseInt(inputFromUser.next())));
                 break;
             case 4:
                 isRunning = false;

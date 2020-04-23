@@ -6,6 +6,7 @@ import static org.junit.Assert.*;
 
 import static org.hamcrest.CoreMatchers.*;
 
+import com.twu.biblioteca.databases.BookDataBase;
 import com.twu.biblioteca.domain.User;
 import com.twu.biblioteca.exceptions.ExitException;
 import com.twu.biblioteca.utils.Messages;
@@ -21,8 +22,9 @@ public class BlibliotecaAppTest {
     @Before
     public void setUp() {
         Scanner sc = new Scanner("");
+        User testUser = new User("Test", "");
         dataBase = new BookDataBase();
-        poller = new Poller(sc,dataBase);
+        poller = new Poller(sc,dataBase,testUser);
     }
 
     @Test
@@ -81,7 +83,11 @@ public class BlibliotecaAppTest {
         int realId = 9-1;
         dataBase.bookCheckout(new User("test", "test"), 9);
         assertThat(dataBase.getBookList().get(realId).isAvailable(), is(false));
-        assertThat(dataBase.bookCheckout(new User("test", "test"), 9), containsString(Messages.UNSUCCESSFUL_CHECKOUT_MESSAGE));
+        assertThat(dataBase.bookCheckout(new User("test", "test"), 9), containsString(Messages.UNSUCCESSFUL_BOOK_CHECKOUT_MESSAGE));
     }
 
+    @Test
+    public void ifIInput0ToCheckoutAnIdIShouldGetAnInvalidOptionMessage() {
+        assertThat(dataBase.bookCheckout(new User("test", "test"), 0), containsString(Messages.MENU_INPUT_ERROR));
+    }
 }
