@@ -1,5 +1,6 @@
 package com.twu.biblioteca.domain;
 
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,11 +9,14 @@ public class User {
     private List<Movie> movieList;
     private String username;
     private String password;
+    private boolean isLoggedIn;
+    private UserInfo userInfo;
 
     public User() {
 
     }
-    public User(String username, String password){
+
+    public User(String username, String password) {
         this.username = username;
         this.password = password;
         this.bookList = new ArrayList<>();
@@ -23,7 +27,9 @@ public class User {
         return bookList;
     }
 
-    public List<Movie> getMovieList() { return movieList; }
+    public List<Movie> getMovieList() {
+        return movieList;
+    }
 
     public String getUsername() {
         return username;
@@ -33,12 +39,21 @@ public class User {
         return password;
     }
 
+    public boolean isLoggedIn() {
+        return isLoggedIn;
+    }
+
+    public void setLoggedIn(boolean loggedIn) {
+        isLoggedIn = loggedIn;
+    }
+
     public void addBooks(Book usedBook) {
         this.bookList.add(usedBook);
     }
+
     public void removeBooks(Book returningBook) {
         for (Book usedBook : bookList) {
-            if (usedBook.getId() == returningBook.getId()){
+            if (usedBook.getId() == returningBook.getId()) {
                 bookList.remove(returningBook.getId());
             }
         }
@@ -72,5 +87,19 @@ public class User {
             str.append(" Title: " + movie.getTitle() + "\n");
         });
         return str.toString();
+    }
+
+    @Override
+    public String toString() {
+        return "Username:'" + username + '\'' +
+                ", isLoggedIn:" + isLoggedIn;
+    }
+
+    public UserInfo getUserInfo() {
+        return userInfo;
+    }
+
+    public void setUserInfo(UserInfo userInfo) {
+        this.userInfo = userInfo;
     }
 }

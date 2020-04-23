@@ -1,14 +1,11 @@
 package com.twu.biblioteca.enums;
 
-public enum Genre {
-    FANTASY("Fantasy"),
-    DRAMA("Drama"),
-    ADVENTURE("Adventure"),
-    SCIENCE_FICTION("Science Fiction");
+public enum Directors {
+    THE_WACHOWSKIS("The Wachowskis");
 
     private String displayName;
 
-    Genre(String displayName) {
+    Directors(String displayName) {
         this.displayName = displayName;
     }
 

@@ -7,6 +7,8 @@ import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.*;
 
 import com.twu.biblioteca.databases.BookDataBase;
+import com.twu.biblioteca.databases.MovieDataBase;
+import com.twu.biblioteca.databases.UserDataBase;
 import com.twu.biblioteca.domain.User;
 import com.twu.biblioteca.exceptions.ExitException;
 import com.twu.biblioteca.utils.Messages;
@@ -17,14 +19,19 @@ import java.util.Scanner;
 
 public class BlibliotecaAppTest {
     private BookDataBase dataBase;
+    private MovieDataBase movieDataBase;
+    private UserDataBase userDataBase;
+    private User testUser;
     private Poller poller;
 
     @Before
     public void setUp() {
         Scanner sc = new Scanner("");
-        User testUser = new User("Test", "");
+        testUser = new User("Current_User", "1");
         dataBase = new BookDataBase();
-        poller = new Poller(sc,dataBase,testUser);
+        movieDataBase = new MovieDataBase();
+        userDataBase = new UserDataBase();
+        poller = new Poller(sc, dataBase, movieDataBase, userDataBase, testUser);
     }
 
     @Test
@@ -34,7 +41,7 @@ public class BlibliotecaAppTest {
 
     @Test
     public void helloMessageShouldBeAsRequested() {
-        assertThat(Messages.HELLO_MESSAGE, is(equalTo("Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!")));
+        assertThat(Messages.HELLO_MESSAGE, is(equalTo("Welcome to Biblioteca. Your one-stop-shop for great book titles and movies in Bangalore!")));
     }
 
     @Test
@@ -59,7 +66,7 @@ public class BlibliotecaAppTest {
 
     @Test
     public void menuShouldHaveNOptions() {
-        assertThat((int)Messages.mainMenu().chars().filter(str -> str == '.').count(), is(equalTo(4)));
+        assertThat((int) Messages.mainMenu().chars().filter(str -> str == '.').count(), is(equalTo(8)));
     }
 
     @Test
@@ -69,25 +76,25 @@ public class BlibliotecaAppTest {
 
     @Test(expected = ExitException.class)
     public void ifMenuOption4IsSelectedThenApplicationExits() {
-        poller.activePoll(4);
+        poller.activePoll(7);
     }
 
     @Test
     public void ifISelectABookForCheckoutItShouldNotShowAnymore() {
-        dataBase.bookCheckout(new User("test", "test"), 9);
+        dataBase.bookCheckout(testUser, 9);
         assertThat(dataBase.shorterString().contains("id: 9"), is(not(true)));
     }
 
     @Test
     public void ifISelectABookForCheckoutItShouldNotBeAvailableAnymore() {
         int realId = 9-1;
-        dataBase.bookCheckout(new User("test", "test"), 9);
+        dataBase.bookCheckout(testUser, 9);
         assertThat(dataBase.getBookList().get(realId).isAvailable(), is(false));
-        assertThat(dataBase.bookCheckout(new User("test", "test"), 9), containsString(Messages.UNSUCCESSFUL_BOOK_CHECKOUT_MESSAGE));
+        assertThat(dataBase.bookCheckout(testUser, 9), containsString(Messages.UNSUCCESSFUL_BOOK_CHECKOUT_MESSAGE));
     }
 
     @Test
     public void ifIInput0ToCheckoutAnIdIShouldGetAnInvalidOptionMessage() {
-        assertThat(dataBase.bookCheckout(new User("test", "test"), 0), containsString(Messages.MENU_INPUT_ERROR));
+        assertThat(dataBase.bookCheckout(testUser, 0), containsString(Messages.MENU_INPUT_ERROR));
     }
 }

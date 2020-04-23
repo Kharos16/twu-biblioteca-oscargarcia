@@ -3,6 +3,8 @@ package com.twu.biblioteca.databases;
 
 import com.twu.biblioteca.domain.Movie;
 import com.twu.biblioteca.domain.User;
+import com.twu.biblioteca.enums.Directors;
+import com.twu.biblioteca.enums.Genre;
 import com.twu.biblioteca.utils.Messages;
 
 import java.util.ArrayList;
@@ -14,15 +16,12 @@ public class MovieDataBase {
 
     public MovieDataBase() {
         movieList = new ArrayList<>();
+        movieList.add(new Movie("The Matrix", Genre.SCIENCE_FICTION.getDisplayName(),
+                Directors.THE_WACHOWSKIS.getDisplayName(), 10));
+        movieList.add(new Movie("The Matrix Reloaded", Genre.SCIENCE_FICTION.getDisplayName(),
+                Directors.THE_WACHOWSKIS.getDisplayName(), 10));
     }
 
-    private String genreNator(String[] genres) {
-        StringBuilder str = new StringBuilder();
-        for (String input : genres){
-            str.append(input + " ");
-        }
-        return str.toString();
-    }
 
     public List<Movie> getMovieList() {
         return this.movieList;
@@ -41,17 +40,17 @@ public class MovieDataBase {
                 checkoutResult.append(Messages.SUCCESSFUL_MOVIE_CHECKOUT_MESSAGE);
                 return checkoutResult.toString();
             }
-            checkoutResult.append(Messages.UNSUCCESSFUL_MOVIE_CHECKOUT_MESSAGE);
-            return checkoutResult.toString();
-        }
+        checkoutResult.append(Messages.UNSUCCESSFUL_MOVIE_CHECKOUT_MESSAGE);
+        return checkoutResult.toString();
+    }
 
-    public String returnBook(User user, int movieId) {
-        int realId = movieId-1;
+    public String returnMovie(User user, int movieId) {
+        int realId = movieId - 1;
         StringBuilder returnResult = new StringBuilder();
-        if (realId < 0){
+        if (realId < 0) {
             returnResult.append(Messages.MENU_INPUT_ERROR);
             return returnResult.toString();
-        }else if (!movieList.get(realId).isAvailable()) {
+        } else if (!movieList.get(realId).isAvailable()) {
             movieList.get(realId).setAvailable(true);
             user.removeMovie(movieList.get(realId));
             returnResult.append(Messages.MOVIE_TO_RETURN_MESSAGE + movieList.get(realId).shorterString() + "\n");

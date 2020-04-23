@@ -4,15 +4,25 @@ public class Messages {
     private Messages() {
         throw new IllegalStateException("Utility class");
     }
-    public static final String HELLO_MESSAGE = "Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!";
+    public static final String HELLO_MESSAGE = "Welcome to Biblioteca. Your one-stop-shop for great book titles and movies in Bangalore!";
     public static final String mainMenu() {
         StringBuilder mainMenu = new StringBuilder();
         mainMenu.append("\n1. List all Books \n");
         mainMenu.append("2. Checkout a Book \n");
         mainMenu.append("3. Return a Book \n");
-        mainMenu.append("4. Quit the application");
+        mainMenu.append("4. List all Movies\n");
+        mainMenu.append("5. Checkout a Movie\n");
+        mainMenu.append("6. Return a Movie\n");
+        mainMenu.append("7. See User Information\n");
+        mainMenu.append("8. Quit the application");
         return mainMenu.toString();
     }
+
+    public static final String USERNAME = "Input your Username: ";
+    public static final String PASSWORD = "Input your Password: ";
+    public static final String USER_MUST_LOGIN = "You must login to use the Biblioteca!";
+    public static final String PLEASE_LOGIN = "Please Login!";
+    public static final String CURRENT_USER_INFO = "The current user's information is:";
     public static final String SELECTED_BOOK_MESSAGE = "The selected book is: ";
     public static final String BOOK_TO_RETURN_MESSAGE = "The book to return is: ";
     public static final String BOOK_CHECKOUT_MESSAGE = "To checkout a book please input the id of the book you want to use";
