@@ -1,5 +1,7 @@
 package com.twu.biblioteca;
 
+import com.twu.biblioteca.utils.Messages;
+
 import java.util.Scanner;
 
 public class BibliotecaApp {
@@ -8,8 +10,7 @@ public class BibliotecaApp {
         System.out.println(Messages.HELLO_MESSAGE);
         Scanner inputFromUser = new Scanner(System.in);
         BookDataBase dataBase = new BookDataBase();
-        System.out.println(Messages.mainMenu());
-        Poller poller = new Poller();
-        poller.activePoll(inputFromUser,dataBase);
+        Poller poller = new Poller(inputFromUser, dataBase);
+        poller.activePoll();
     }
 }

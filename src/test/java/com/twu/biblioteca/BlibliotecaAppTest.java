@@ -6,18 +6,23 @@ import static org.junit.Assert.*;
 
 import static org.hamcrest.CoreMatchers.*;
 
-import org.junit.BeforeClass;
+import com.twu.biblioteca.domain.User;
+import com.twu.biblioteca.exceptions.ExitException;
+import com.twu.biblioteca.utils.Messages;
+import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Scanner;
+
 public class BlibliotecaAppTest {
-    private static BookDataBase dataBase;
-    private static Poller poller;
+    private BookDataBase dataBase;
+    private Poller poller;
 
-
-    @BeforeClass
-    public static void setUp() {
+    @Before
+    public void setUp() {
+        Scanner sc = new Scanner("");
         dataBase = new BookDataBase();
-        poller = new Poller();
+        poller = new Poller(sc,dataBase);
     }
 
     @Test
@@ -32,7 +37,7 @@ public class BlibliotecaAppTest {
 
     @Test
     public void listOfBooksShouldNotBeEmpty(){
-        assertTrue(dataBase.getBookList().size() > 0);
+        assertFalse(dataBase.getBookList().isEmpty());
     }
 
     @Test
@@ -46,17 +51,37 @@ public class BlibliotecaAppTest {
     }
 
     @Test
+    public void listOfBooksShouldHaveAuthorAndYearOfPublication() {
+        assertTrue(dataBase.getBookList().stream().allMatch(book -> book.toString().contains("Author") && book.toString().contains("Year Of Publication")));
+    }
+
+    @Test
     public void menuShouldHaveNOptions() {
         assertThat((int)Messages.mainMenu().chars().filter(str -> str == '.').count(), is(equalTo(4)));
     }
 
     @Test
     public void ifInputIsNotAValidNumberIShouldGetAMessage() {
-        assertThat(Messages.MENU_INPUT_ERROR, is(equalTo("You must input a valid option!")));
+        assertThat(Messages.MENU_INPUT_ERROR, is(equalTo("Please select a valid option!")));
     }
 
     @Test(expected = ExitException.class)
     public void ifMenuOption4IsSelectedThenApplicationExits() {
-        poller.activePoll(4, dataBase);
+        poller.activePoll(4);
     }
+
+    @Test
+    public void ifISelectABookForCheckoutItShouldNotShowAnymore() {
+        dataBase.bookCheckout(new User("test", "test"), 9);
+        assertThat(dataBase.shorterString().contains("id: 9"), is(not(true)));
+    }
+
+    @Test
+    public void ifISelectABookForCheckoutItShouldNotBeAvailableAnymore() {
+        int realId = 9-1;
+        dataBase.bookCheckout(new User("test", "test"), 9);
+        assertThat(dataBase.getBookList().get(realId).isAvailable(), is(false));
+        assertThat(dataBase.bookCheckout(new User("test", "test"), 9), containsString(Messages.UNSUCCESSFUL_CHECKOUT_MESSAGE));
+    }
+
 }

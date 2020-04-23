@@ -1,4 +1,4 @@
-package com.twu.biblioteca;
+package com.twu.biblioteca.domain;
 
 
 public class Book {
@@ -24,7 +24,7 @@ public class Book {
     }
 
     public Book(String title,  int yearOfPublication, String author) {
-        this.id = count++;
+        this.id = ++count;
         this.title = title;
         this.yearOfPublication = yearOfPublication;
         this.author = author;
@@ -92,9 +92,9 @@ public class Book {
         return  "id: " + id + '\'' +
                 ", title: '" + title + '\'' +
                 ", genre: '" + genre + '\'' +
-                ", author: '" + author + '\'' +
+                ", Author: '" + author + '\'' +
                 ", editorial: '" + editorial + '\'' +
-                ", yearOfPublication: " + yearOfPublication + '\'' +
+                ", Year Of Publication: " + yearOfPublication + '\'' +
                 ", isAvailable: " + isAvailable;
     }
 
