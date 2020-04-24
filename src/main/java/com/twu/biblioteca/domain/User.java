@@ -2,6 +2,7 @@ package com.twu.biblioteca.domain;
 
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class User {
@@ -52,9 +53,10 @@ public class User {
     }
 
     public void removeBooks(Book returningBook) {
-        for (Book usedBook : bookList) {
+        for (Iterator<Book> iterator = bookList.iterator(); iterator.hasNext(); ) {
+            Book usedBook = iterator.next();
             if (usedBook.getId() == returningBook.getId()) {
-                bookList.remove(returningBook.getId());
+                iterator.remove();
             }
         }
     }
@@ -73,9 +75,10 @@ public class User {
     }
 
     public void removeMovie(Movie returningMovie) {
-        for (Movie rentedMovie : movieList) {
-            if (rentedMovie.getId() == returningMovie.getId()){
-                movieList.remove(returningMovie.getId());
+        for (Iterator<Movie> iterator = movieList.iterator(); iterator.hasNext(); ) {
+            Movie rentedMovie = iterator.next();
+            if (rentedMovie.getId() == returningMovie.getId()) {
+                iterator.remove();
             }
         }
     }

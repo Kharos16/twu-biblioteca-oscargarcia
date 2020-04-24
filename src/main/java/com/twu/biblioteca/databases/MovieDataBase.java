@@ -30,10 +30,10 @@ public class MovieDataBase {
     public String movieCheckout(User user, int movieId) {
             int realId = movieId-1;
             StringBuilder checkoutResult = new StringBuilder();
-            if (realId < 0){
+            if (realId < 0) {
                 checkoutResult.append(Messages.MENU_INPUT_ERROR);
                 return checkoutResult.toString();
-            }else if (movieList.get(realId).isAvailable()) {
+            } else if (realId < movieList.size() && movieList.get(realId).isAvailable()) {
                 movieList.get(realId).setAvailable(false);
                 user.addMovie(movieList.get(realId));
                 checkoutResult.append(Messages.SELECTED_MOVIE_MESSAGE + movieList.get(realId).shorterString() + "\n");
@@ -45,15 +45,15 @@ public class MovieDataBase {
     }
 
     public String returnMovie(User user, int movieId) {
-        int realId = movieId - 1;
+        final int realId = movieId - 1;
         StringBuilder returnResult = new StringBuilder();
         if (realId < 0) {
             returnResult.append(Messages.MENU_INPUT_ERROR);
             return returnResult.toString();
-        } else if (!movieList.get(realId).isAvailable()) {
+        } else if (doIHaveit(user, realId) && !movieList.get(realId).isAvailable()) {
             movieList.get(realId).setAvailable(true);
             user.removeMovie(movieList.get(realId));
-            returnResult.append(Messages.MOVIE_TO_RETURN_MESSAGE + movieList.get(realId).shorterString() + "\n");
+            returnResult.append(Messages.MOVIE_TO_RETURN_MESSAGE).append(movieList.get(realId).shorterString()).append("\n");
             returnResult.append(Messages.RETURN_MOVIE_MESSAGE_CORRECT);
             return returnResult.toString();
         }
@@ -61,10 +61,14 @@ public class MovieDataBase {
         return returnResult.toString();
     }
 
+    private boolean doIHaveit(User user, int fromDataBase) {
+        return user.getMovieList().stream().anyMatch(movie -> movie.getId() == movieList.get(fromDataBase).getId());
+    }
+
     @Override
     public String toString() {
         StringBuilder list = new StringBuilder();
-        List<Movie>filteredlist =
+        List<Movie> filteredlist =
                 movieList.stream().filter(Movie::isAvailable)
                         .collect(Collectors.toList());
         filteredlist.forEach(movie -> list.append(movie.toString() + "\n"));

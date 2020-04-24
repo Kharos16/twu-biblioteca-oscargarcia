@@ -1,6 +1,8 @@
 package com.twu.biblioteca.utils;
 
 public class Messages {
+
+
     private Messages() {
         throw new IllegalStateException("Utility class");
     }
@@ -18,6 +20,7 @@ public class Messages {
         return mainMenu.toString();
     }
 
+    public static final String CREDENTIALS_INVALID = "The credentials you used do not match a record from the database!";
     public static final String USERNAME = "Input your Username: ";
     public static final String PASSWORD = "Input your Password: ";
     public static final String USER_MUST_LOGIN = "You must login to use the Biblioteca!";

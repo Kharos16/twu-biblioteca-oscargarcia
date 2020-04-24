@@ -15,19 +15,27 @@ public class Poller {
     private final BookDataBase bookDataBase;
     private final MovieDataBase movieDataBase;
     private final UserDataBase userDataBase;
-    private final User currentLoggedUser;
+    private User currentLoggedUser;
 
-    public Poller(Scanner inputFromUser, BookDataBase bookDataBase, MovieDataBase movieDataBase, UserDataBase userDataBase, User user) {
+    public Poller(Scanner inputFromUser, BookDataBase bookDataBase, MovieDataBase movieDataBase, UserDataBase userDataBase) {
         this.isRunning = true;
         this.inputFromUser = inputFromUser;
         this.bookDataBase = bookDataBase;
         this.movieDataBase = movieDataBase;
         this.userDataBase = userDataBase;
-        this.currentLoggedUser = user;
+        this.currentLoggedUser = new User();
     }
 
     public void activePoll() {
         do {
+            if (!currentLoggedUser.isLoggedIn()) {
+                System.out.println(Messages.PLEASE_LOGIN);
+                System.out.println(Messages.USERNAME);
+                String usr = inputFromUser.next();
+                System.out.println(Messages.PASSWORD);
+                String pass = inputFromUser.next();
+                setCurrentLoggedUser(new User(usr, pass));
+            }
             if (validateLogin(currentLoggedUser)) {
                 try {
                     System.out.println(Messages.mainMenu());
@@ -39,6 +47,7 @@ public class Poller {
                     System.out.println(Messages.MENU_INPUT_ERROR);
                 }
             } else {
+                System.out.println(Messages.CREDENTIALS_INVALID);
                 System.out.println(Messages.USER_MUST_LOGIN);
             }
         } while (isRunning);
@@ -46,7 +55,13 @@ public class Poller {
 
     public void activePoll(int option) {
         do {
-            interpretate(option, bookDataBase, movieDataBase);
+            try {
+                System.out.println(Messages.mainMenu());
+                interpretate(option, bookDataBase, movieDataBase);
+            } catch (NumberFormatException | IndexOutOfBoundsException e) {
+                System.out.println(e.toString());
+                System.out.println(Messages.MENU_INPUT_ERROR);
+            }
         } while (isRunning);
     }
 
@@ -85,6 +100,10 @@ public class Poller {
             case 7:
                 System.out.println(Messages.CURRENT_USER_INFO);
                 System.out.println(currentLoggedUser.getUserInfo());
+                System.out.println(Messages.USER_BOOK_RETURN_MESSAGE);
+                System.out.println(currentLoggedUser.getUsedBooks());
+                System.out.println(Messages.USER_MOVIE_RETURN_MESSAGE);
+                System.out.println(currentLoggedUser.getUsedMovies());
                 break;
             case 8:
                 isRunning = false;
@@ -105,5 +124,9 @@ public class Poller {
         }
         user.setLoggedIn(false);
         return user.isLoggedIn();
+    }
+
+    private void setCurrentLoggedUser(User currentLoggedUser) {
+        this.currentLoggedUser = currentLoggedUser;
     }
 }

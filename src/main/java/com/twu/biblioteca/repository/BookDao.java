@@ -19,16 +19,16 @@ public class BookDao implements Dao<Book> {
 
     @Override
     public void save(Book book) {
-
+        throw new UnsupportedOperationException("Method not implemented");
     }
 
     @Override
     public void update(Book book) {
-
+        throw new UnsupportedOperationException("Method not implemented");
     }
 
     @Override
     public void delete(Book book) {
-
+        throw new UnsupportedOperationException("Method not implemented");
     }
 }

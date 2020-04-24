@@ -31,7 +31,7 @@ public class BlibliotecaAppTest {
         dataBase = new BookDataBase();
         movieDataBase = new MovieDataBase();
         userDataBase = new UserDataBase();
-        poller = new Poller(sc, dataBase, movieDataBase, userDataBase, testUser);
+        poller = new Poller(sc, dataBase, movieDataBase, userDataBase);
     }
 
     @Test
@@ -76,7 +76,7 @@ public class BlibliotecaAppTest {
 
     @Test(expected = ExitException.class)
     public void ifMenuOption4IsSelectedThenApplicationExits() {
-        poller.activePoll(7);
+        poller.activePoll(8);
     }
 
     @Test

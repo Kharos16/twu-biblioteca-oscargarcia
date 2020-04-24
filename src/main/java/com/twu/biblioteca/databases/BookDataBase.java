@@ -38,9 +38,9 @@ public class BookDataBase {
                 Editorial.ALLEN_UNWIN.getDisplayName(),1955,Authors.JRRTOLKIEN.getDisplayName()));
     }
 
-    private String genreNator(String[] genres) {
+    private String genreNator(String[] genreArray) {
         StringBuilder str = new StringBuilder();
-        for (String input : genres){
+        for (String input : genreArray) {
             str.append(input + " ");
         }
         return str.toString();
@@ -53,30 +53,30 @@ public class BookDataBase {
     public String bookCheckout(User user, int bookId) {
             int realId = bookId-1;
             StringBuilder checkoutResult = new StringBuilder();
-            if (realId < 0){
-                checkoutResult.append(Messages.MENU_INPUT_ERROR);
-                return checkoutResult.toString();
-            }else if (bookList.get(realId).isAvailable()) {
-                bookList.get(realId).setAvailable(false);
-                user.addBooks(bookList.get(realId));
-                checkoutResult.append(Messages.SELECTED_BOOK_MESSAGE + bookList.get(realId).shorterString() + "\n");
-                checkoutResult.append(Messages.SUCCESSFUL_BOOK_CHECKOUT_MESSAGE);
-                return checkoutResult.toString();
-            }
+        if (realId < 0) {
+            checkoutResult.append(Messages.MENU_INPUT_ERROR);
+            return checkoutResult.toString();
+        } else if (realId < bookList.size() && bookList.get(realId).isAvailable()) {
+            bookList.get(realId).setAvailable(false);
+            user.addBooks(bookList.get(realId));
+            checkoutResult.append(Messages.SELECTED_BOOK_MESSAGE + bookList.get(realId).shorterString() + "\n");
+            checkoutResult.append(Messages.SUCCESSFUL_BOOK_CHECKOUT_MESSAGE);
+            return checkoutResult.toString();
+        }
             checkoutResult.append(Messages.UNSUCCESSFUL_BOOK_CHECKOUT_MESSAGE);
             return checkoutResult.toString();
         }
 
     public String returnBook(User user, int bookId) {
-        int realId = bookId-1;
+        final int realId = bookId - 1;
         StringBuilder returnResult = new StringBuilder();
-        if (realId < 0){
+        if (realId < 0) {
             returnResult.append(Messages.MENU_INPUT_ERROR);
             return returnResult.toString();
-        }else if (!bookList.get(realId).isAvailable()) {
+        } else if (doIHaveIt(user, realId) && !bookList.get(realId).isAvailable()) {
             bookList.get(realId).setAvailable(true);
             user.removeBooks(bookList.get(realId));
-            returnResult.append(Messages.BOOK_TO_RETURN_MESSAGE + bookList.get(realId).shorterString() + "\n");
+            returnResult.append(Messages.BOOK_TO_RETURN_MESSAGE).append(bookList.get(realId).shorterString()).append("\n");
             returnResult.append(Messages.RETURN_BOOK_MESSAGE_CORRECT);
             return returnResult.toString();
         }
@@ -84,10 +84,15 @@ public class BookDataBase {
         return returnResult.toString();
     }
 
+
+    private boolean doIHaveIt(User user, int fromDataBase) {
+        return user.getBookList().stream().anyMatch(book -> book.getId() == bookList.get(fromDataBase).getId());
+    }
+
     @Override
     public String toString() {
         StringBuilder list = new StringBuilder();
-        List<Book>filteredlist =
+        List<Book> filteredlist =
                 bookList.stream().filter(Book::isAvailable)
                         .collect(Collectors.toList());
         filteredlist.forEach(book -> list.append(book.toString() + "\n"));
