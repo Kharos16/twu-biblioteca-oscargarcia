@@ -1,0 +1,74 @@
+q1 Who checked out the book 'The Hobbit’?
+select member.name from member 
+where member.id in (
+    select checkout_item.member_id
+    from book, checkout_item
+    where checkout_item.book_id = book.id
+    and book.title = 'The Hobbit'
+);
+Answer: Anand Beck check out the book.
+
+q2 How many people have not checked out anything?
+select
+(select count(1) from member)
+-
+(select count() from checkout_item);
+Answer: 33 people haven't checked out anything
+
+q3 What books and movies aren't checked out?
+select book.title from book 
+where book.id in (
+    select checkout_item.book_id
+    from checkout_item
+)
+union
+select movie.title from movie 
+where movie.id in (
+    select checkout_item.movie_id
+    from checkout_item
+);
+Answer: The list of books and movies that aren't checked out is:
+Airplane
+Day of the Dead
+Dune
+Life of Brian
+Life of Pi
+Rush
+Star Wars
+The Hobbit
+The Pragmatic Programmer
+Two Towers
+
+q4 Add the book 'The Pragmatic Programmer', 
+and add yourself as a member. Check out 
+'The Pragmatic Programmer'. Use your query from question 1 
+to verify that you have checked it out. Also, provide the SQL
+used to update the database.
+
+insert into book values(11,"The Pragmatic Programmer");
+insert into member values(43, "Oscar Garcia");
+insert into checkout_item default values;
+update checkout_item
+set member_id = 43, book_id = 11
+where member_id is null;   
+select member.name from member 
+where member.id in (
+    select checkout_item.member_id
+    from book, checkout_item
+    where checkout_item.book_id = book.id
+    and book.title = 'The Pragmatic Programmer'
+);
+
+q5 Who has checked out more than 1 item? 
+Tip: Research the GROUP BY syntax.
+
+select member_id
+from checkout_item
+group by member_id
+having count(member_id) > 1;
+
+select member.name from member 
+where member.id in (1,6);
+
+Answer: members 1 and 6 have checkedout more than 1 item.
+They are Anand Beck and Frank Smith.
